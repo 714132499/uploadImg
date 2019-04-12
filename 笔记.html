@@ -1,0 +1,74 @@
+Vue-cli + Vue-router + Axios + Mui + Mint-ui
+遇到的问题：
+1. 使用mui的底部导航，router-link 无法跳转页面
+解决：
+第一种方法：去掉 class="mui-tab-item" 样式自己写
+<nav class="mui-bar mui-bar-tab">
+    <router-link :to="{path:'/home'}" class="myself">
+        <span class="iconfont icon-shouye"></span>
+        <span class="mui-tab-label">首页</span>
+    </router-link>
+    <router-link :to="{path:'/business'}" class="myself">
+        <span class="iconfont icon-dingdan"></span>
+        <span class="mui-tab-label">业务</span>
+    </router-link>
+    <router-link :to="{path:'/earnings'}" tag='a' class="myself">
+        <span class="iconfont icon-daifukuan"></span>
+        <span class="mui-tab-label">收益</span>
+    </router-link>
+    <router-link :to="{path:'/myself'}" tag='a' class="myself">
+        <span class="iconfont icon-wode"></span>
+        <span class="mui-tab-label">我的</span>
+    </router-link>
+</nav>
+<style>
+    .myself {
+        display: table-cell;
+        overflow: hidden;
+        width: 1%;
+        height: 50px;
+        text-align: center;
+        vertical-align: middle;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        color: #929292;
+
+    .iconfont {
+        font-size: 22px;
+    }
+
+    .mui-icon {
+        top: 3px;
+        width: 24px;
+        height: 24px;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .mui-tab-label {
+        font-size: 11px;
+        display: block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    }
+</style>
+router:{
+linkActiveClass:'mui-active',
+linkExactActiveClass:'mui-active'
+}
+
+第二种方法（有缺点，点击返回会回到初始页面/）：在该组件中添加：
+mounted() {
+mui('body').on('click','a',function(){document.location.href=this.href;});
+mui('body').on('tap','a',function(){document.location.href=this.href;});
+}
+此外，在mui.css中添加样式：
+* {
+touch-action: pan-y;
+}
+
+
+2.打包后，引入的阿里图标无法显示
+解决：在文件webpack.prod.conf.js中修改webpackConfig->module->rules->extract: false
